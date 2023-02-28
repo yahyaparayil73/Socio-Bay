@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+    <title>User Complaints</title>
+</head>
+
+<body>
+    <section class="vh-100" style="background-color: #899a61;">
+        <div class="container py-3 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col col-xl-10">
+                    <div class="card" style="border-radius: 1rem;">
+                        <div class="row g-0" style="height: 500px;">
+
+                            <div class="col-md-5 col-lg-5 d-none d-md-block">
+                                <div class="sam"
+                                    style="background-image:url('https://media.istockphoto.com/id/1368151370/photo/user-typing-login-and-password-cyber-security-concept.jpg?b=1&s=170667a&w=0&k=20&c=wm6YUMs03Bup4_9XcQaX61L711qJxAUExEJp_PWO8gI='); background-size: cover;border-radius: 15px; height: 500px; width: 400px;">
+                                    <!-- <img src="{% static 'images/dsdfsdfdsfs.webp' %}" height="500px" width="400px" style="border-radius: 15px;"> -->
+                                </div>
+                            </div>
+
+                            <div class="col-md-5 col-lg-7 d-flex align-items-center">
+                                <div class="card-body p-lg-5 text-black" style="margin-top: -35px;">
+
+                                    <form>
+
+                                        <div class="d-flex align-items-center">
+                                            <span class="h1 fw-bold mb-0">We're here for you !!</span>
+                                        </div>
+
+                                        <h5 class="fw-normal mb-3 pb-3">Please fill the
+                                            form below for your complaints</h5>
+
+                                        <div class="form-outline mb-4">
+                                            <label class="form-label" for="form2Example17">Subject of the
+                                                complaint</label>
+                                            <input type="text" id="subject_complaint"
+                                                class="form-control form-control-lg">
+                                            <span id="subject_complaint_error_msg_id"
+                                                style="display: inline;float: right;color: red;"></span>
+
+                                        </div>
+
+                                        <div class="form-outline mb-4">
+                                            <label for="exampleFormControlTextarea1">The complaint is regarding:
+                                            </label>
+                                            <textarea class="form-control" id="complaint" rows="3"></textarea>
+                                            <span style="display: inline; float: right; color: red;"
+                                                    id="complaint_error_msg_id"></span>
+                                        </div>
+
+                                        <div class="pt-1 mb-4">
+                                            <button class="btn btn-danger btn-lg btn-block" type="submit"
+                                                onclick="return complaint_validation()">Submit</button>
+                                        </div>
+                                    </form>
+
+                                    <div class="col-lg-6 hidden-sm text-right" style="margin-left: 300px;">
+                                        <a href="{% url 'user:user_profile' %}" class="btn btn-outline-secondary"><i
+                                                class="fa fa-user"></i></a>
+                                        <a href="{% url 'user:user_home' %}" class="btn btn-outline-primary"><i
+                                                class="fa fa-home"></i></i></a>
+                                        <a href="{% url 'user:user_complaints' %}" class="btn btn-outline-warning"><i
+                                                class="fa fa-question"></i></a>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+        integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+        crossorigin="anonymous"></script>
+    <script>
+        function complaint_validation() {
+
+            var subject_complaint = document.getElementById('subject_complaint').value
+            var complaint = document.getElementById('complaint').value
+
+            if (subject_complaint == "") {
+
+                document.getElementById('subject_complaint').style.border = 'red solid 1px';
+                document.getElementById('subject_complaint_error_msg_id').innerHTML = "Enter your Subject";
+                return false;
+
+            } else {
+
+                document.getElementById('subject_complaint').style.border = "";
+                document.getElementById('subject_complaint_error_msg_id').innerHTML = "";
+
+            }
+
+            if (complaint == "") {
+
+                document.getElementById('complaint').style.border = 'red solid 1px';
+                document.getElementById('complaint_error_msg_id').innerHTML = "Enter the Complaint";
+                return false;
+
+            } else {
+
+                document.getElementById('complaint').style.border = "";
+                document.getElementById('complaint_error_msg_id').innerHTML = "";
+
+            }
+
+        }
+
+    </script>
+</body>
+
+</html>
