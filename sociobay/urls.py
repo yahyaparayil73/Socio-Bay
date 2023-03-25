@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/',admin.site.urls),
     path('',include('user.urls')),
     path('common/',include('common.urls')),
+    path('socio_admin/',include('socio_admin.urls')),
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

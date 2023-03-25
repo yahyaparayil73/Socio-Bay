@@ -47,16 +47,32 @@
     <h1>jquery Sample</h1>
     <p>This is a test</p>
     <p>This is also a test</p>
+    <h1>Showing the Values</h1>
+    <input type="text" id="input_id" placeholder="enter a value">
+    <button id="btn">click Here</button>
 
 
 
 
     <script>
+        // $(document).ready(function () {
+        //     $("h1").click(function () {
+        //         $("p").hide();
+        //     });
+        //     $("h1").click(function () {
+        //         $("p").show();
+        //     });
+        // });
+
         $(document).ready(function () {
-            $("h1").click(function () {
-                $("p").hide();
+            $("#btn").click(function () {
+                alert("value is " + $("#input_id").val());
             });
         });
+
+
+
+
 
 
 

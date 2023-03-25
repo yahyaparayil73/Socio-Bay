@@ -11,9 +11,13 @@ urlpatterns = [
     path ('user_profile',views.user_profile,name='user_profile'),
     path ('test',views.test,name='test'),
     path ('user_change_password',views.user_change_password,name='user_change_password'),
-    path("chat", views.chat, name="chat"),
-    path("room", views.room, name="room"),
-    path("chat_history", views.chat_history, name="chat_history"),
+    path ('chat', views.chat, name="chat"),
+    path ('chat_history', views.chat_history, name="chat_history"),
+    path ('user_requests', views.user_requests, name="user_requests"),
+    path ('add_friend', views.add_friend, name="add_friend"),
+    path ('user_logout', views.user_logout, name="user_logout"),
+    path('user_email_exist', views.user_email_exist, name='user_email_exist'),
+
 
 
 

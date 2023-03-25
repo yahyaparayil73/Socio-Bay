@@ -9,8 +9,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{% static 'style/socio.css' %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+
     <title>User Home</title>
     <style>
         .scroll_container {
@@ -31,14 +36,15 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-lg-3">
-                    <div class="card chat-app">
+                    <h6>Welcome, {{ user_home_name.user_name |title }}</h6>
+                    <div class="card chat-app" style="width: 240px;">
                         <div id="plist" class="people-list dr">
                             <div class="input-group" style="width: 100%;">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" style="height: 37.33px;border-radius: 0%;"><i
                                             class="fa fa-search"></i></span>
                                 </div>
-                                <input type="text" class="form-control" placeholder="Search..."
+                                <input type="text" class="form-control" placeholder="Search Your Contacts"
                                     style="border-radius: 0%;">
                             </div>
                             <ul class="list-unstyled chat-list mt-2 mb-0">
@@ -157,24 +163,61 @@
                                             class="fa fa-home"></i></i></a>
                                     <a href="{% url 'user:user_complaints' %}" class="btn btn-outline-warning"><i
                                             class="fa fa-question"></i></a>
-                                    <a href="#" class="btn btn-outline-info" data-bs-toggle="dropdown"><i
-                                            class="fa fa-cogs"></i></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#">Edit Profile</a></li>
-                                        <li><a class="dropdown-item" href="{% url 'user:user_change_password' %}">Change
-                                                Password</a>
-                                        </li>
-                                        <li><a class="dropdown-item"
-                                                href="{% url 'user:user_statistics' %}">Statistics</a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="{% url 'user:user_login' %}">Logout</a>
-                                        </li>
-                                    </ul>
+                                    <div class="dropdown">
+                                        <a href="#" class="btn btn-outline-info" data-bs-toggle="dropdown"><i
+                                                class="fa fa-cogs"></i></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#">Edit Profile</a></li>
+                                            <li><a class="dropdown-item"
+                                                    href="{% url 'user:user_change_password' %}">Change
+                                                    Password</a>
+                                            </li>
+                                            <li><a class="dropdown-item"
+                                                    href="{% url 'user:user_statistics' %}">Statistics</a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="{% url 'user:user_logout' %}">Logout</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
+                                <div class="input-group" style="width: 60%;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="height: 37.33px;border-radius: 0%;"><i
+                                                class="fa fa-search"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Search for a User"
+                                        style="border-radius: 0%;">
+                                    <!-- <button class="btn-outline-info">Requests</button> -->
+                                    <a href="{% url 'user:user_requests' %}" class="btn btn-outline-warning"
+                                        style="border-radius: 5px;margin-left: 25px;">Requests</a>
+
+                                </div>
+
+
+
                             </div>
                         </div>
                         <div id="chat_div">
+                            <!-- <div class="card"
+                                style="width: 25rem; height: 25rem;display: block;margin-left: auto;margin-right: auto;">
+                                <div style="margin-top: 25px;">
+                                    <img src="{% static 'images/user_img_1.png' %}" width="85px" alt=""
+                                        style="display: block;margin-left: auto;margin-right: auto;">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">Irshad PK</h5>
+                                        <p class="card-text">Software Developer,<br>
+                                            Balussery,
+                                            Kerala
+                                        </p>
+                                        <button class="btn btn-primary">Show Profile</button>
+                                        <button class="btn btn-success">Send Request</button>
+
+                                    </div>
+                                </div>
+                            </div> -->
+                            {{loginedname}}
                             {% include 'chat_history.html' %}
+
                         </div>
 
 
@@ -183,7 +226,7 @@
             </div>
         </div>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
 
     <script>
 
@@ -209,12 +252,8 @@
         }
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
-        integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
-        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+
 
 </body>
 

@@ -37,7 +37,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     
     'user',
-    'channels',
+    'socio_admin',
     'common',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -89,7 +89,7 @@ ASGI_APPLICATION = "sociobay.routing.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'socio_bay',
+        'NAME': 'sociobay',
         'USER': 'postgres',
         'PASSWORD': 'yahya123',
         'HOST': 'localhost',

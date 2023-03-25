@@ -1,4 +1,5 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
+from user.models import Complaint
 from user.models import User
 from django.http import JsonResponse
 from django.template.loader import render_to_string
@@ -7,47 +8,50 @@ from django.template.loader import render_to_string
 
 
 def user_home(request):
+    user = User.objects.get(id=request.session['user'])
+
     if request.method == 'POST':
-        user = 'Yahya'
+        user = 'Irshad PK'
         html = render_to_string(
-            template_name = 'chat_history.html',
-            context = {'user_name': user}
+            template_name='chat_history.html',
+            context={'user_name': user}
         )
-        return JsonResponse({'html':html})
-    return render(request, 'user_home.html')
+        return JsonResponse({'html': html})
+    return render(request, 'user_home.html', {'user_home_name': user})
 
 
 def user_login(request):
     msg = ''
-    if request.method == "POST":
-        email = request.POST['email']
-        password = request.POST['password']
-        # try:
-        user = User.objects.get(
-            user_email=email, user_password=password)  # model_name= post_name
-        request.session['user_id'] = user.id
-        msg = 'Success '+ user.user_name
-        return redirect('user:user_home')
-        # except Exception as e:
-            # print(e)  # to check error
-            # msg = 'Invalid credentials'
+    if request.method == 'POST':
+        useremail = request.POST['email']
+        userpassword = request.POST['password']
+        try:
+
+            new_user = User.objects.get(
+                user_email=useremail, user_password=userpassword)  # model_name= post_name
+            request.session['user'] = new_user.id
+            return redirect('user:user_home')
+        except User.DoesNotExist:
+            msg = 'Invalid credentials'
     return render(request, 'login.html', {'message': msg})
 
 
 def user_profile(request):
-    return render(request, 'user_profile.html')
+    user = User.objects.get(id=request.session['user'])
+    return render(request, 'user_profile.html', {'user_profile': user})
 
 
 def user_signup(request):
     if request.method == "POST":
-        
-        user_name = request.POST['user_name']
 
-        user_email = request.POST['user_email']
-        user_password = request.POST['user_password']
+        username = request.POST['user_name']
+        useremail = request.POST['user_email']
+        userpassword = request.POST['user_password']
 
-        new_user = User(user_name = user_name, user_email=user_email,
-        user_password=user_password)
+        new_user = User(
+            user_name=username,
+            user_email=useremail,
+            user_password=userpassword)
 
         new_user.save()  # corresponding query of insert
         return redirect('user:user_login')
@@ -59,7 +63,24 @@ def user_statistics(request):
 
 
 def user_complaints(request):
-    return render(request, 'user_complaints.html')
+    msg = ''
+    if request.method == 'POST':
+
+        complaintsubject = request.POST['complaint_subject']
+        complaintbody = request.POST['complaint_body']
+
+        user = request.session['user']
+        complaints = Complaint(
+            complaint_sub=complaintsubject,
+            complaint_body=complaintbody,
+            users_id=user
+        )
+
+
+        complaints.save()
+        msg = 'Complaint recorded Successfully'
+
+    return render(request, 'user_complaints.html', {'message': msg})
 
 
 def test(request):
@@ -67,15 +88,53 @@ def test(request):
 
 
 def user_change_password(request):
-    return render(request, 'user_change_password.html')
+    msg = ''
+    err_msg = ''
+    if request.method == 'POST':
+
+        oldpassword = request.POST['user_old_password']
+        newpassword = request.POST['user_new_password']
+        password = User.objects.get(id=request.session['user'])
+        if password.user_password == oldpassword:
+
+            password.user_password = newpassword
+            password.save()
+            msg = 'Password Updated Successfully'
+        else:
+            err_msg = 'Passwords does not match'
+
+    return render(request, 'user_change_password.html', {'message': msg, 'error_message': err_msg})
 
 
 def chat(request):
     return render(request, "chat.html")
 
 
-def room(request):
-    return render(request, "room.html")
-
 def chat_history(request):
     return render(request, "chat_history.html")
+
+
+def user_requests(request):
+    return render(request, "user_requests.html")
+
+
+def add_friend(request):
+    return render(request, "add_friend.html")
+
+# def user_logout(request):
+#     del request.session['user']
+#     request.session.flush()
+#     return redirect('user:user_login')
+
+
+def user_logout(request):  # to get the sessions deleted after the user the user logout
+    if 'user' in request.session:
+        del request.session['user']
+    request.session.flush()
+    return redirect('user:user_login')
+
+
+def user_email_exist(request):
+    email = request.POST['email_data']
+    email_exist = User.objects.filter(user_email=email).exists()
+    return JsonResponse({'email_exist': email_exist})
