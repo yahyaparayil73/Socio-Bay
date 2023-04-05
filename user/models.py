@@ -8,11 +8,11 @@ class User(models.Model):
     user_name = models.CharField(max_length=50)
     user_email = models.EmailField(max_length=254)
     user_password = models.CharField(max_length=50)
+    user_image = models.ImageField(upload_to = 'user/',default='')
     user_aboutof = models.CharField(max_length=200,default='None', blank=True, null=True)
     user_status = models.IntegerField(default=1, blank=True, null=True)
     user_last_seen = models.DateTimeField(default=None, blank=True, null=True)
     user_online_status = models.IntegerField(default=0, blank=True, null=True)
-    # user_image = models.ImageField()
 
     class Meta:
         db_table = 'users'

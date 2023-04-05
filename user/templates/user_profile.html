@@ -16,12 +16,20 @@
 
     <title>User Profile</title>
 </head>
+
 <body style="background-color: rgb(182, 137, 224);">
-    
+
     <div class="container text-center" style="display: grid;  justify-content: center;">
-        <h1 style="color: white;">USER <B style="color: rgb(197, 210, 230);text-align: center;">PROFILE</B></h1><br><br>
+        <h1 style="color: white;">USER PROFILE</h1><br><br>
+        <div class="col">
+            <div class="row">
+                <div class="col justify-content-center align-items-center">
+                    <img src="{{ user_profile.user_image.url }}" width="150px" alt="">
+                </div>
+            </div>
+        </div>
         <div class="row align-items-center">
-            <div class="col justify-content-center" >
+            <div class="col justify-content-center">
                 <div class="row">
                     <div class="col align-items-center">
                         <div class="card" style="width: 18rem;">
@@ -53,10 +61,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col" style="margin-left: 80px;margin-right: 80px;">
+            <div class="col">
                 <div class="row">
                     <div class="col justify-content-center align-items-center">
-                        <img src="{% static 'images/user_img_1.png' %}" width="150px" alt="">
+                        <img src="{{ user_profile.user_image.url }}" width="150px" alt="">
                     </div>
                 </div>
 

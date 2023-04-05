@@ -46,12 +46,14 @@ def user_signup(request):
 
         username = request.POST['user_name']
         useremail = request.POST['user_email']
+        userimage = request.FILES['user_image']
         userpassword = request.POST['user_password']
 
         new_user = User(
-            user_name=username,
-            user_email=useremail,
-            user_password=userpassword)
+            user_name = username,
+            user_email = useremail,
+            user_image = userimage,
+            user_password = userpassword)
 
         new_user.save()  # corresponding query of insert
         return redirect('user:user_login')
@@ -138,3 +140,6 @@ def user_email_exist(request):
     email = request.POST['email_data']
     email_exist = User.objects.filter(user_email=email).exists()
     return JsonResponse({'email_exist': email_exist})
+
+def profile(request):
+    return render(request, "profile.html")

@@ -8,10 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">
-   
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{% static 'style/socio.css' %}">
 
@@ -35,65 +33,48 @@
     <div>
         <div class="container">
             <div class="row clearfix">
-                <div class="col-lg-3">
-                    <h6>Welcome, {{ user_home_name.user_name |title }}</h6>
-                    <div class="card chat-app" style="width: 240px;">
+                <div class="col-lg-3" style="margin-top: 50px;">
+                    <div class="col-lg-3 hidden-sm text-right" style="display: flex;">
+                        <a href="{% url 'user:user_profile' %}" class="btn btn-outline-secondary"><i
+                                class="fa fa-user"></i></a>
+                        <a href="{% url 'user:user_home' %}" class="btn btn-outline-primary"><i
+                                class="fa fa-home"></i></i></a>
+                        <a href="{% url 'user:user_complaints' %}" class="btn btn-outline-warning"><i
+                                class="fa fa-question"></i></a>
+                        <div class="dropdown">
+                            <a href="#" class="btn btn-outline-info" data-bs-toggle="dropdown"><i
+                                    class="fa fa-cogs"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Edit Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'user:user_change_password' %}">Change
+                                        Password</a>
+                                </li>
+                                <li><a class="dropdown-item" href="{% url 'user:user_statistics' %}">Statistics</a>
+                                </li>
+                                <li><a class="dropdown-item" href="{% url 'user:user_logout' %}">Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card chat-app" style="width: 240px; margin-top: 20px;">
                         <div id="plist" class="people-list dr">
                             <div class="input-group" style="width: 100%;">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" style="height: 37.33px;border-radius: 0%;"><i
                                             class="fa fa-search"></i></span>
                                 </div>
-                                <input type="text" class="form-control" placeholder="Search Your Contacts"
+                                <input type="text" class="form-control" placeholder="Search Contacts"
                                     style="border-radius: 0%;">
                             </div>
+                            <!-- ==========================contacts list================================ -->
                             <ul class="list-unstyled chat-list mt-2 mb-0">
                                 <div class="scroll_container">
-                                    <li class="clearfix active">
+                                    <li class="clearfix">
                                         <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
                                         <div class="about">
                                             <div class="name">Mushraf Mohammed</div>
                                             <div class="status"> <i class="fa fa-circle offline"></i> left 7 mins
                                                 ago
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="clearfix">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
-                                        <div class="about">
-                                            <div class="name">Vishnu CP</div>
-                                            <div class="status"> <i class="fa fa-circle online"></i> online </div>
-                                        </div>
-                                    </li>
-                                    <li class="clearfix">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="avatar">
-                                        <div class="about">
-                                            <div class="name">Aparna K</div>
-                                            <div class="status"> <i class="fa fa-circle online"></i> online </div>
-                                        </div>
-                                    </li>
-                                    <li class="clearfix">
-                                        <img src="{% static 'images/prashob_dp.jpg' %}" alt="avatar">
-                                        <div class="about">
-                                            <div class="name">Prashob C</div>
-                                            <div class="status"> <i class="fa fa-circle offline"></i> left 10 hours ago
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="clearfix">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="avatar">
-                                        <div class="about">
-                                            <div class="name">Ajmilath</div>
-                                            <div class="status" onclick="showChat()"> <i
-                                                    class="fa fa-circle online"></i> online </div>
-                                        </div>
-                                    </li>
-                                    <li class="clearfix">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="avatar">
-                                        <div class="about">
-                                            <div class="name">Developer Jaleesha</div>
-                                            <div class="status"> <i class="fa fa-circle offline"></i> offline since Oct
-                                                28
                                             </div>
                                         </div>
                                     </li>
@@ -105,48 +86,10 @@
                                             </div>
                                         </div>
                                     </li>
-                                    <li class="clearfix">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
-                                        <div class="about">
-                                            <div class="name">Binshu Kottaramukku</div>
-                                            <div class="status"> <i class="fa fa-circle online"></i>Online</div>
-                                        </div>
-                                    </li>
-                                    <li class="clearfix">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
-                                        <div class="about">
-                                            <div class="name">Ajmal Omanoor</div>
-                                            <div class="status"> <i class="fa fa-circle offline"></i> Seen Long ago
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="clearfix">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                                            style="border-radius: 50%;" alt="avatar">
-                                        <div class="about">
-                                            <div class="name">Rohit CR7</div>
-                                            <div class="status"> <i class="fa fa-circle offline"></i> Seen 3 Hours ago
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="clearfix">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="avatar">
-                                        <div class="about">
-                                            <div class="name">Vaishnavi Developer</div>
-                                            <div class="status"> <i class="fa fa-circle offline"></i> Seen 3 Days ago
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="clearfix">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
-                                        <div class="about">
-                                            <div class="name">Amal christo</div>
-                                            <div class="status"> <i class="fa fa-circle offline"></i> Seen 1 Day ago
-                                            </div>
-                                        </div>
-                                    </li>
                                 </div>
                             </ul>
+                            <!-- ==========================End of contacts list================================ -->
+
                         </div>
 
                     </div>
@@ -154,32 +97,7 @@
                 <div class="col">
                     <div class="chat">
                         <div class="chat-header clearfix">
-                            <div class="row">
-
-                                <div class="col-lg-3 hidden-sm text-right" style="display: flex;">
-                                    <a href="{% url 'user:user_profile' %}" class="btn btn-outline-secondary"><i
-                                            class="fa fa-user"></i></a>
-                                    <a href="{% url 'user:user_home' %}" class="btn btn-outline-primary"><i
-                                            class="fa fa-home"></i></i></a>
-                                    <a href="{% url 'user:user_complaints' %}" class="btn btn-outline-warning"><i
-                                            class="fa fa-question"></i></a>
-                                    <div class="dropdown">
-                                        <a href="#" class="btn btn-outline-info" data-bs-toggle="dropdown"><i
-                                                class="fa fa-cogs"></i></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#">Edit Profile</a></li>
-                                            <li><a class="dropdown-item"
-                                                    href="{% url 'user:user_change_password' %}">Change
-                                                    Password</a>
-                                            </li>
-                                            <li><a class="dropdown-item"
-                                                    href="{% url 'user:user_statistics' %}">Statistics</a>
-                                            </li>
-                                            <li><a class="dropdown-item" href="{% url 'user:user_logout' %}">Logout</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+                            <div>
                                 <div class="input-group" style="width: 60%;">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" style="height: 37.33px;border-radius: 0%;"><i
@@ -187,16 +105,13 @@
                                     </div>
                                     <input type="text" class="form-control" placeholder="Search for a User"
                                         style="border-radius: 0%;">
-                                    <!-- <button class="btn-outline-info">Requests</button> -->
                                     <a href="{% url 'user:user_requests' %}" class="btn btn-outline-warning"
-                                        style="border-radius: 5px;margin-left: 25px;">Requests</a>
-
+                                        style="border-radius: 5px; margin-left: 20px;">Requests</a>
                                 </div>
-
-
-
                             </div>
                         </div>
+                        <h6 style="margin-left: 20px;margin-top: 8px;display:inline;">
+                            {{ user_home_name.user_name |title }}</h6>
                         <div id="chat_div">
                             <!-- <div class="card"
                                 style="width: 25rem; height: 25rem;display: block;margin-left: auto;margin-right: auto;">
@@ -226,8 +141,6 @@
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
-
     <script>
 
         function showChat() {
@@ -252,7 +165,8 @@
         }
     </script>
 
-<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.js"
+        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 
 
 </body>

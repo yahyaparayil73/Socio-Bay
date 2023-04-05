@@ -17,6 +17,7 @@ urlpatterns = [
     path ('add_friend', views.add_friend, name="add_friend"),
     path ('user_logout', views.user_logout, name="user_logout"),
     path('user_email_exist', views.user_email_exist, name='user_email_exist'),
+    path('profile', views.profile, name='profile'),
 
 
 
