@@ -11,10 +11,22 @@
 </head>
 
 <body>
+    <div class="offcanvas offcanvas-start show" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasLabel">Offcanvas</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            Content for the offcanvas goes here. You can place just about any Bootstrap component or custom elements
+            here.
+        </div>
+    </div>
     <div class="container">
         <h3>Welcome to Sociobay, Admin</h3><br>
-        <a href="{%url 'socio_admin:view_complaints' %}" style="color: white;text-decoration: none;"><button
+        <a href="{% url 'socio_admin:view_complaints' %}" style="color: white;text-decoration: none;"><button
                 type="button" class="btn btn-success">View Complaints</button></a>
+        <a href="{% url 'socio_admin:view_users' %}" style="color: white;text-decoration: none;"><button type="button"
+                class="btn btn-success">View Users</button></a>
     </div>
 
 

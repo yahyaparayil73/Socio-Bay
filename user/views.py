@@ -3,6 +3,8 @@ from user.models import Complaint
 from user.models import User
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.db.models import Q
+
 
 # Create your views here.
 
@@ -50,10 +52,10 @@ def user_signup(request):
         userpassword = request.POST['user_password']
 
         new_user = User(
-            user_name = username,
-            user_email = useremail,
-            user_image = userimage,
-            user_password = userpassword)
+            user_name=username,
+            user_email=useremail,
+            user_image=userimage,
+            user_password=userpassword)
 
         new_user.save()  # corresponding query of insert
         return redirect('user:user_login')
@@ -77,7 +79,6 @@ def user_complaints(request):
             complaint_body=complaintbody,
             users_id=user
         )
-
 
         complaints.save()
         msg = 'Complaint recorded Successfully'
@@ -129,7 +130,7 @@ def add_friend(request):
 #     return redirect('user:user_login')
 
 
-def user_logout(request):  # to get the sessions deleted after the user the user logout
+def user_logout(request):  # to get the sessions deleted after the user logout
     if 'user' in request.session:
         del request.session['user']
     request.session.flush()
@@ -141,5 +142,20 @@ def user_email_exist(request):
     email_exist = User.objects.filter(user_email=email).exists()
     return JsonResponse({'email_exist': email_exist})
 
+
 def profile(request):
     return render(request, "profile.html")
+
+
+# def search_users(request):
+#     usersearch = request.GET.get('user_search', '')
+#     users = User.objects.filter(user_name=usersearch)
+#     results = [{'id': user.id, 'text': user.user_name} for user in users]
+#     return JsonResponse(results, safe=False)
+
+def search(request):
+    query = request.GET.get('q')
+    results = User.objects.filter(
+        Q(user_name__icontains=query)
+    )
+    return render(request, 'search_results.html', {'results': results})

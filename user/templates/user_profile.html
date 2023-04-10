@@ -18,16 +18,17 @@
 </head>
 
 <body style="background-color: rgb(182, 137, 224);">
+    
 
     <div class="container text-center" style="display: grid;  justify-content: center;">
         <h1 style="color: white;">USER PROFILE</h1><br><br>
-        <div class="col">
+        <!-- <div class="col">
             <div class="row">
                 <div class="col justify-content-center align-items-center">
                     <img src="{{ user_profile.user_image.url }}" width="150px" alt="">
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="row align-items-center">
             <div class="col justify-content-center">
                 <div class="row">
@@ -35,7 +36,7 @@
                         <div class="card" style="width: 18rem;">
                             <div class="card-body">
                                 <h5 class="card-title">Name</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">{{ user_profile.user_name |title}}</h6>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ user_profile.user_name | title}}</h6>
                             </div>
                         </div>
                     </div>
@@ -64,7 +65,7 @@
             <div class="col">
                 <div class="row">
                     <div class="col justify-content-center align-items-center">
-                        <img src="{{ user_profile.user_image.url }}" width="150px" alt="">
+                        <img src="{{ user_profile.user_image.url }}" width="150px" height="150px" style="border-radius: 80px;" alt="">
                     </div>
                 </div>
 
@@ -103,6 +104,7 @@
             </div>
         </div>
     </div><br>
+
     <div class="col-lg-6 hidden-sm text-right" style="margin-left: 175px;">
         <a href="{% url 'user:user_profile' %}" class="btn btn-outline-secondary"><i class="fa fa-user"></i></a>
         <a href="{% url 'user:user_home' %}" class="btn btn-outline-primary"><i class="fa fa-home"></i></i></a>

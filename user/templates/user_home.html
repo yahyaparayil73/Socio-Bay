@@ -11,6 +11,8 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.js"
+        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'style/socio.css' %}">
 
 
@@ -97,14 +99,18 @@
                 <div class="col">
                     <div class="chat">
                         <div class="chat-header clearfix">
+
                             <div>
                                 <div class="input-group" style="width: 60%;">
+                                    {% csrf_token %}
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text" style="height: 37.33px;border-radius: 0%;"><i
-                                                class="fa fa-search"></i></span>
+                                        <span class="input-group-text" style="height: 37.33px;border-radius: 0%;">
+                                            <i class="fa fa-search"></i>
+                                        </span>
                                     </div>
                                     <input type="text" class="form-control" placeholder="Search for a User"
-                                        style="border-radius: 0%;">
+                                        style="border-radius: 0%;" id="search-bar">
+                                    <div id="search-results"></div>
                                     <a href="{% url 'user:user_requests' %}" class="btn btn-outline-warning"
                                         style="border-radius: 5px; margin-left: 20px;">Requests</a>
                                 </div>
@@ -144,10 +150,6 @@
     <script>
 
         function showChat() {
-
-
-
-
             $.ajaxSetup({
                 headers: {
                     "X-CSRFToken": '{{csrf_token}}'
@@ -163,11 +165,30 @@
 
 
         }
+
+        $(document).ready(function () {
+            $('#search-bar').on('keyup', function () {
+                $.ajaxSetup({
+                    headers: {
+                        "X-CSRFToken": '{{csrf_token}}'
+                    }
+                })          
+                var query = $(this).val();
+                $.ajax({
+                    url: "{% url 'user:search' %}",
+                    data: {
+                        'q': query
+                    },
+                    dataType: 'html',
+                    success: function (data) {
+                        $('#search-results').html(data);
+                    }
+                });
+            });
+        });
+
+
     </script>
-
-    <script src="https://code.jquery.com/jquery-3.6.4.js"
-        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
-
 
 </body>
 

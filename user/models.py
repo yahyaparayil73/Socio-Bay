@@ -54,3 +54,14 @@ class Complaint(models.Model):
 
     class Meta:
         db_table = 'complaints'
+
+class FriendRequest(models.Model):
+
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_requests')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_requests')
+    status = models.CharField(max_length=10, default='pending')
+
+    class Meta:
+        db_table = 'friend requests'
+
+    

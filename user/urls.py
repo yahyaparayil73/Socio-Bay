@@ -18,6 +18,8 @@ urlpatterns = [
     path ('user_logout', views.user_logout, name="user_logout"),
     path('user_email_exist', views.user_email_exist, name='user_email_exist'),
     path('profile', views.profile, name='profile'),
+    path('search', views.search, name='search'),
+
 
 
 

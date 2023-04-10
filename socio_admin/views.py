@@ -1,7 +1,8 @@
 from django.shortcuts import redirect, render
 from socio_admin.models import Admin
 
-from user.models import Complaint
+
+from user.models import Complaint,User
 
 # Create your views here.
 
@@ -28,3 +29,7 @@ def admin_login(request):
 def view_complaints(request):
     complaints = Complaint.objects.all()
     return render(request,'view_complaints.html',{'complaints':complaints})
+
+def viewUsers(request):
+    users = User.objects.all()
+    return render(request,'view_users.html',{'users':users})
