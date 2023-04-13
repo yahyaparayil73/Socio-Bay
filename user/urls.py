@@ -18,7 +18,17 @@ urlpatterns = [
     path ('user_logout', views.user_logout, name="user_logout"),
     path('user_email_exist', views.user_email_exist, name='user_email_exist'),
     path('profile', views.profile, name='profile'),
-    path('search', views.search, name='search'),
+    path('sidebar', views.sidebar, name='sidebar'),
+    path('search_results/',views.search_results, name='search_results'),
+    path('terms_of_use',views.terms_of_use, name='terms_of_use'),
+    path('privacy_policy',views.privacy_policy, name='privacy_policy'),
+    path('search_users/', views.search_users, name='search_users'),
+    path('show_profile/user=<str:username>', views.show_profile, name='show_profile'),
+    path('send-friend-request/<str:username>', views.send_friend_request, name='send_friend_request'),
+
+    
+
+
 
 
 

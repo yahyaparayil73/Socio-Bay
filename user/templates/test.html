@@ -6,74 +6,98 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        type="text/html">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Test</title>
+    <style>
+        .not-visible {
 
-    <!-- <style>
-        .grid-container {
-            display: grid;
-            background-color: blue;
-            padding: 10px;
-            gap: 10px;
-            grid-template-columns: auto auto auto;
-            width: 50%;
+            display: none;
+
         }
 
-        .grid-item {
-            padding: 20px;
-            border: 3px solid black;
-            font-size: medium;
+        .results-card {
+
+            width: 100%;
+            box-shadow: 0 2px 0 2px rgba(0, 0, 0, 0.25);
+            border-radius: 7px;
+            padding: 15px 25px;
+            margin: 0 auto;
+
+        }
+      
+        .serch{
+            position: absolute;
+            background-color: white;
+            width: 200px;
             text-align: center;
-            background-color: yellow;
+        
         }
-    </style> -->
+        .serch div{
+            border: 0.5px solid rgb(11, 10, 10);
+            color: black;
+            background-color: rgb(255, 255, 255); 
+
+        
+        }
+    </style>
+    </style>
 </head>
 
 <body>
-    <!-- <div class="">
-        <div class="grid-container" style="margin-left: auto; margin-right: auto; margin-top: 14%;">
-            <div class="grid-item">1</div>
-            <div class="grid-item">2</div>
-            <div class="grid-item">3</div>
-            <div class="grid-item">4</div>
-            <div class="grid-item">5</div>
-            <div class="grid-item">6</div>
-            <div class="grid-item">7</div>
-            <div class="grid-item">8</div>
-            <div class="grid-item">9</div>
-        </div>
-    </div> -->
-    <h1>jquery Sample</h1>
-    <p>This is a test</p>
-    <p>This is also a test</p>
-    <h1>Showing the Values</h1>
-    <input type="text" id="input_id" placeholder="enter a value">
-    <button id="btn">click Here</button>
+    {% csrf_token %}
+    <input type="text" id="search-input" placeholder="Search users">
 
+
+    <!-- results box -->
+    <div class="serch" id="serch">
+        
+    </div>
 
 
 
     <script>
-        // $(document).ready(function () {
-        //     $("h1").click(function () {
-        //         $("p").hide();
-        //     });
-        //     $("h1").click(function () {
-        //         $("p").show();
-        //     });
-        // });
 
         $(document).ready(function () {
-            $("#btn").click(function () {
-                alert("value is " + $("#input_id").val());
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRFToken": $('[name=csrfmiddlewaretoken]').val()
+                }
+            })
+
+        })
+        $('#search-input').keyup(function () {
+            var url="{% url 'user:show_profile' 'name' %}"
+            var query = $('#search-input' ).val()
+            $.ajax({
+                url: "{% url 'user:search_users' %}",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    'query': query
+                },
+                success: function (response) {
+                    console.log(response.users)
+                    var data=response.users
+                    
+                    $('#serch').empty()
+                    for(i in data){
+                        user=data[i].username
+                        userid=data[i].id
+                        urls=url.replace('name',user)
+                        var divs='<div>'+user+'</div>'
+                        $('#serch').append('<a href="'+urls+'">'+divs+'</a>')
+
+
+                    }
+                },
+                error: (xhr, status, error) => {
+                    console.log(error);
+                }
             });
-        });
 
-
-
-
-
+        })
 
 
     </script>

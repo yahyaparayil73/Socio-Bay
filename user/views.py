@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from user.models import Complaint
+from user.models import Complaint, FriendRequest
 from user.models import User
 from django.http import JsonResponse
 from django.template.loader import render_to_string
@@ -131,31 +131,70 @@ def add_friend(request):
 
 
 def user_logout(request):  # to get the sessions deleted after the user logout
+
     if 'user' in request.session:
         del request.session['user']
     request.session.flush()
+
     return redirect('user:user_login')
 
 
 def user_email_exist(request):
+
     email = request.POST['email_data']
     email_exist = User.objects.filter(user_email=email).exists()
+
     return JsonResponse({'email_exist': email_exist})
 
 
 def profile(request):
-    return render(request, "profile.html")
 
+    user = User.objects.get(id=request.session['user'])
 
-# def search_users(request):
-#     usersearch = request.GET.get('user_search', '')
-#     users = User.objects.filter(user_name=usersearch)
-#     results = [{'id': user.id, 'text': user.user_name} for user in users]
-#     return JsonResponse(results, safe=False)
+    return render(request, "profile.html",{'user':user})
 
-def search(request):
-    query = request.GET.get('q')
-    results = User.objects.filter(
-        Q(user_name__icontains=query)
-    )
-    return render(request, 'search_results.html', {'results': results})
+def sidebar(request):
+    return render(request, "sidebar.html")
+
+def search_results(request):
+    print("search_results called")
+    if request.is_ajax():
+        user = request.POST.get('user')
+        print(user)
+        return JsonResponse({'data':user})
+    return JsonResponse({})
+
+def terms_of_use(request):
+    return render(request,"terms_of_use.html")
+
+def privacy_policy(request):
+    return render(request,"privacy_policy.html")
+
+def search_users(request):
+    query = request.POST['query']
+    if query:
+        users = User.objects.filter(Q(user_name__icontains=query) | Q(user_email__icontains=query))
+        data = [{'id': user.id, 'username': user.user_name} for user in users]
+        return JsonResponse({'users': data})
+    else:
+        return JsonResponse({})
+    
+def show_profile(request,username):
+    user=User.objects.get(user_name=username)
+    return render(request,"show_profile.html",{'data':user})
+
+# def send_friend_request(request, username):
+#     sender = request.user
+#     receiver = get_object_or_404(User, username=username)
+#     if sender != receiver:
+#         friend_request = FriendRequest(sender=sender, receiver=receiver)
+#         friend_request.save()
+#     return redirect('profile', username=username)
+
+def send_friend_request(request):
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+

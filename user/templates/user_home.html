@@ -17,18 +17,7 @@
 
 
     <title>User Home</title>
-    <style>
-        .scroll_container {
-            overflow-y: scroll;
-            max-height: 523px;
-            position: relative;
-            width: 245px;
-        }
 
-        .scroll_container::-webkit-scrollbar {
-            display: none;
-        }
-    </style>
 </head>
 
 <body style="background-color: #e8f1f3;">
@@ -37,8 +26,8 @@
             <div class="row clearfix">
                 <div class="col-lg-3" style="margin-top: 50px;">
                     <div class="col-lg-3 hidden-sm text-right" style="display: flex;">
-                        <a href="{% url 'user:user_profile' %}" class="btn btn-outline-secondary"><i
-                                class="fa fa-user"></i></a>
+                        <!-- <a href="{% url 'user:profile' %}" class="btn btn-outline-secondary"><i
+                                class="fa fa-user"></i></a> -->
                         <a href="{% url 'user:user_home' %}" class="btn btn-outline-primary"><i
                                 class="fa fa-home"></i></i></a>
                         <a href="{% url 'user:user_complaints' %}" class="btn btn-outline-warning"><i
@@ -47,7 +36,6 @@
                             <a href="#" class="btn btn-outline-info" data-bs-toggle="dropdown"><i
                                     class="fa fa-cogs"></i></a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Edit Profile</a></li>
                                 <li><a class="dropdown-item" href="{% url 'user:user_change_password' %}">Change
                                         Password</a>
                                 </li>
@@ -58,7 +46,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="card chat-app" style="width: 240px; margin-top: 20px;">
+                    <div class="card chat-app" style="width: 245px; margin-top: 20px;">
                         <div id="plist" class="people-list dr">
                             <div class="input-group" style="width: 100%;">
                                 <div class="input-group-prepend">
@@ -100,42 +88,36 @@
                     <div class="chat">
                         <div class="chat-header clearfix">
 
-                            <div>
-                                <div class="input-group" style="width: 60%;">
-                                    {% csrf_token %}
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" style="height: 37.33px;border-radius: 0%;">
-                                            <i class="fa fa-search"></i>
-                                        </span>
+
+                            <div class="input-group">
+                                <!-- <div class="input-group-prepend">
+                                    <span class="input-group-text" style="height: 37.33px;border-radius: 0%;">
+                                        <i class="fa fa-search"></i>
+                                    </span>
+                                </div> -->
+                                <div class="col">
+                                    <div class="row">
+                                        <form id="search-form" autocomplete="off">
+                                            {% csrf_token %}
+                                            <input type="text" id="search-input" class="form-control"
+                                                placeholder="Search for a User" style="border-radius: 0%;"
+                                                id="search-bar">
+                                        </form>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Search for a User"
-                                        style="border-radius: 0%;" id="search-bar">
-                                    <div id="search-results"></div>
+                                    <div id="results_box" class="results-card"></div>
+                                </div>
+                                <div class="col">
                                     <a href="{% url 'user:user_requests' %}" class="btn btn-outline-warning"
-                                        style="border-radius: 5px; margin-left: 20px;">Requests</a>
+                                        style="border-radius: 5px; margin-left: 10px;">Requests</a>
+                                </div>
+                                <div class="col">
+                                    <a href="{% url 'user:profile' %}"><img src="{{ user_home_name.user_image.url }}"
+                                            height="38px"></a>
+                                    <h6 class="logged_in details">{{ user_home_name.user_name |title }}</h6>
                                 </div>
                             </div>
                         </div>
-                        <h6 style="margin-left: 20px;margin-top: 8px;display:inline;">
-                            {{ user_home_name.user_name |title }}</h6>
                         <div id="chat_div">
-                            <!-- <div class="card"
-                                style="width: 25rem; height: 25rem;display: block;margin-left: auto;margin-right: auto;">
-                                <div style="margin-top: 25px;">
-                                    <img src="{% static 'images/user_img_1.png' %}" width="85px" alt=""
-                                        style="display: block;margin-left: auto;margin-right: auto;">
-                                    <div class="card-body text-center">
-                                        <h5 class="card-title">Irshad PK</h5>
-                                        <p class="card-text">Software Developer,<br>
-                                            Balussery,
-                                            Kerala
-                                        </p>
-                                        <button class="btn btn-primary">Show Profile</button>
-                                        <button class="btn btn-success">Send Request</button>
-
-                                    </div>
-                                </div>
-                            </div> -->
                             {{loginedname}}
                             {% include 'chat_history.html' %}
 
@@ -166,22 +148,109 @@
 
         }
 
+        // const url = window.location.href;
+        // const searchForm = document.getElementById('search-form');
+        // const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        // const searchInput = document.getElementById('search-input');
+        // const sendSearchData = (user) => {
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: '/search_results/',
+        //         data: {
+        //             'csrfmiddlewaretoken': csrf,
+        //             'user': user,
+        //         },
+        //         success: (res) => {
+        //             console.log(res);
+        //         },
+        //         error: (err) => {
+        //             console.log(err);
+        //         }
+        //     });
+        // }
+
+        // searchInput.addEventListener('keyup', e => {
+        //     console.log(e.target.value);
+        //     const resultsBox = document.getElementById('results-box');
+        //     if (resultsBox !== null) {
+        //         // Do something with the element
+        //         resultsBox.classList.remove('not-visible');
+        //     }
+        //     sendSearchData(e.target.value);
+        // });
+
+
+        // if (searchInput && resultsBox) {
+        //     searchInput.addEventListener('keyup', e => {
+        //         console.log(e.target.value);
+        //         if (resultsBox.classList.contains('not-visible')) {
+        //             resultsBox.classList.remove('not-visible');
+        //         }
+
+        //         sendSearchData(e.target.value);
+        //     });
+        // }
+
+
+    </script>
+    <script>
+
         $(document).ready(function () {
-            $('#search-bar').on('keyup', function () {
-                $.ajaxSetup({
-                    headers: {
-                        "X-CSRFToken": '{{csrf_token}}'
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRFToken": $('[name=csrfmiddlewaretoken]').val()
+                }
+            })
+
+        })
+        $('#search-input').keyup(function () {
+            var url = "{% url 'user:show_profile' 'name' %}"
+            var query = $('#search-input').val()
+            $.ajax({
+                url: "{% url 'user:search_users' %}",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    'query': query
+                },
+                success: function (response) {
+                    console.log(response.users)
+                    var data = response.users
+
+                    $('#results_box').empty()
+                    for (i in data) {
+                        user = data[i].username
+                        userid = data[i].id
+                        urls = url.replace('name', user)
+                        var divs = '<div>' + user + '</div>'
+                        $('#results_box').append('<a href="' + urls + '">' + divs + '</a>')
+
+
                     }
-                })          
-                var query = $(this).val();
+                },
+                error: (xhr, status, error) => {
+                    console.log(error);
+                }
+            });
+
+        })
+        $(function () {
+            $('#request_button').click(function () {
+                // Get the title and description values from the form fields
+                var title = $('#title').val();
+                var description = $('#description').val();
+
+                // Send a POST request to the server with the title and description data
                 $.ajax({
-                    url: "{% url 'user:search' %}",
-                    data: {
-                        'q': query
-                    },
-                    dataType: 'html',
+                    url: '/request/',
+                    method: 'POST',
+                    data: { title: title, description: description },
                     success: function (data) {
-                        $('#search-results').html(data);
+                        // Redirect the user to the success page
+                        window.location.href = '/success/';
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle errors here
                     }
                 });
             });

@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+    <title>Show profile</title>
+</head>
+
+<body>
+    <div class="container"
+        style="width: 100%;height: 100vh; display: flex; justify-content: center;align-items: center;">
+        <div class="card" style="width: 20rem; height: 20rem; background-color: rgb(228, 225, 221);">
+            <div style="margin-top: 25px;">
+                <img src="{{ data.user_image.url }}" width="85px" alt=""
+                    style="display: block;margin-left: auto;margin-right: auto;">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{data.user_name}}</h5>
+                    <p class="card-text">{{data.user_email}}<br>
+
+                    </p>
+                    <button class="btn btn-success" id="request_button">Send Request</button>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+<script>
+
+    $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                "X-CSRFToken": $('[name=csrfmiddlewaretoken]').val()
+            }
+        })
+
+    })
+    $(function () {
+        $('#request_button').click(function () {
+            // Get the ID of the user you want to send the friend request to
+            var user_id = $('#user_id').val();
+
+            // Send a POST request to the server with the user ID data
+            $.ajax({
+                url: '/send-friend-request/',
+                method: 'POST',
+                data: { user_id: user_id },
+                success: function (data) {
+                    // Handle success here
+                    alert("Friend request sent!");
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors here
+                }
+            });
+        });
+    });
+
+
+</script>
+
+</html>
