@@ -8,7 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
     <title>Show profile</title>
 </head>
@@ -25,8 +26,14 @@
                     <p class="card-text">{{data.user_email}}<br>
 
                     </p>
-                    <button class="btn btn-success" id="request_button">Send Request</button>
-
+                    <!-- <form id="friend_request_form" method="POST" action="{% url 'user:send_friend_request' %}"> -->
+                        {% csrf_token %}
+                        <input type="hidden" name="user_id" value="{{ data.user_id }}">
+                        <button type="submit" class="btn btn-success" id="request_btn">Send Request</button>
+                    <!-- </form> -->
+                    <span id="span1" style="display: none;">
+                        {{data.id}}
+                    </span>
                 </div>
             </div>
         </div>
@@ -34,36 +41,42 @@
     </div>
 </body>
 <script>
-
+    
+    var id =  $('#span1').html()
     $(document).ready(function () {
+        console.log(id)
         $.ajaxSetup({
             headers: {
                 "X-CSRFToken": $('[name=csrfmiddlewaretoken]').val()
             }
-        })
+        });
+    });
 
-    })
     $(function () {
-        $('#request_button').click(function () {
+        $('#request_btn').click(function () {
+            console.log(id)
             // Get the ID of the user you want to send the friend request to
             var user_id = $('#user_id').val();
 
             // Send a POST request to the server with the user ID data
             $.ajax({
-                url: '/send-friend-request/',
+                url: '{% url "user:send_friend_request" %}',
                 method: 'POST',
-                data: { user_id: user_id },
-                success: function (data) {
+                data: { 'user_id': id },
+                success: function (response) {
                     // Handle success here
-                    alert("Friend request sent!");
+                    if(response.status == true){
+                        alert('Request has been sent')
+                    }
+
                 },
-                error: function (xhr, status, error) {
-                    // Handle errors here
-                }
+                // error: function (xhr, status, error) {
+                //     // Handle errors here
+                //     alert("Error: " + error);
+                // }
             });
         });
     });
-
 
 </script>
 

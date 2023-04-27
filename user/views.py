@@ -1,9 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from user.models import Complaint, FriendRequest
 from user.models import User
-from django.http import JsonResponse
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.db.models import Q
+from django.http import JsonResponse
+
 
 
 # Create your views here.
@@ -118,17 +120,13 @@ def chat_history(request):
 
 
 def user_requests(request):
-    return render(request, "user_requests.html")
+    requests = FriendRequest.objects.filter(receiver_id = request.session['user'],status = 'pending')
+    print(requests)
+    return render(request, "user_requests.html",{'requests':requests})
 
 
 def add_friend(request):
     return render(request, "add_friend.html")
-
-# def user_logout(request):
-#     del request.session['user']
-#     request.session.flush()
-#     return redirect('user:user_login')
-
 
 def user_logout(request):  # to get the sessions deleted after the user logout
 
@@ -151,50 +149,66 @@ def profile(request):
 
     user = User.objects.get(id=request.session['user'])
 
-    return render(request, "profile.html",{'user':user})
+    return render(request, "profile.html", {'user': user})
+
 
 def sidebar(request):
     return render(request, "sidebar.html")
+
 
 def search_results(request):
     print("search_results called")
     if request.is_ajax():
         user = request.POST.get('user')
         print(user)
-        return JsonResponse({'data':user})
+        return JsonResponse({'data': user})
     return JsonResponse({})
 
+
 def terms_of_use(request):
-    return render(request,"terms_of_use.html")
+    return render(request, "terms_of_use.html")
+
 
 def privacy_policy(request):
-    return render(request,"privacy_policy.html")
+    return render(request, "privacy_policy.html")
+
 
 def search_users(request):
     query = request.POST['query']
     if query:
-        users = User.objects.filter(Q(user_name__icontains=query) | Q(user_email__icontains=query))
+        users = User.objects.filter(
+            Q(user_name__icontains=query) | Q(user_email__icontains=query))
         data = [{'id': user.id, 'username': user.user_name} for user in users]
         return JsonResponse({'users': data})
     else:
         return JsonResponse({})
-    
-def show_profile(request,username):
-    user=User.objects.get(user_name=username)
-    return render(request,"show_profile.html",{'data':user})
 
-# def send_friend_request(request, username):
-#     sender = request.user
-#     receiver = get_object_or_404(User, username=username)
-#     if sender != receiver:
-#         friend_request = FriendRequest(sender=sender, receiver=receiver)
-#         friend_request.save()
-#     return redirect('profile', username=username)
+
+def show_profile(request, username):
+    user = User.objects.get(user_name=username)
+    return render(request, "show_profile.html", {'data': user})
 
 def send_friend_request(request):
     if request.method == 'POST':
-        user_id = request.POST.get('user_id')
-        return JsonResponse({'success': True})
-    else:
-        return JsonResponse({'success': False})
+        reciever_id = request.POST.get('user_id')
+        user_id = request.session['user']
+        new_request = FriendRequest(
+
+            receiver_id = reciever_id,
+            sender_id = user_id,
+            status = 'pending'
+            
+        )
+        new_request.save()
+    return JsonResponse({'status':True})
+
+def approve_requests(request):
+        
+
+        return render(request, "user_requests.html")
+
+
+
+
+
 

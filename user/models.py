@@ -62,6 +62,6 @@ class FriendRequest(models.Model):
     status = models.CharField(max_length=10, default='pending')
 
     class Meta:
-        db_table = 'friend requests'
+        db_table = 'friend_requests'
 
     
