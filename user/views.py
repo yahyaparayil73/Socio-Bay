@@ -5,7 +5,7 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.db.models import Q
 from django.http import JsonResponse
-
+from django.core.exceptions import ObjectDoesNotExist
 
 
 # Create your views here.
@@ -120,13 +120,15 @@ def chat_history(request):
 
 
 def user_requests(request):
-    requests = FriendRequest.objects.filter(receiver_id = request.session['user'],status = 'pending')
+    requests = FriendRequest.objects.filter(
+        receiver_id=request.session['user'], status='pending')
     print(requests)
-    return render(request, "user_requests.html",{'requests':requests})
+    return render(request, "user_requests.html", {'requests': requests})
 
 
 def add_friend(request):
     return render(request, "add_friend.html")
+
 
 def user_logout(request):  # to get the sessions deleted after the user logout
 
@@ -188,27 +190,56 @@ def show_profile(request, username):
     user = User.objects.get(user_name=username)
     return render(request, "show_profile.html", {'data': user})
 
+
 def send_friend_request(request):
     if request.method == 'POST':
-        reciever_id = request.POST.get('user_id')
-        user_id = request.session['user']
-        new_request = FriendRequest(
+        receiver_id = request.POST.get('user_id')
+        sender_id = request.session['user']
 
-            receiver_id = reciever_id,
-            sender_id = user_id,
-            status = 'pending'
-            
-        )
-        new_request.save()
-    return JsonResponse({'status':True})
+        # Check if the receiver_id matches the logged in user's ID
+        if int(receiver_id) == sender_id:
+            return JsonResponse({'status': False, 'message': 'Cannot send friend request to self'})
 
-def approve_requests(request):
+        # check if a friend request already exists with these sender and receiver IDs
+        try:
+            existing_request = FriendRequest.objects.get(
+                sender_id=sender_id, receiver_id=receiver_id)
+            if existing_request.status == 'pending':
+                # request already exists and is still pending, so return an error response
+                return JsonResponse({'status': False, 'message': 'Friend request already sent'})
+        except ObjectDoesNotExist:
+            # request does not already exist, so create a new FriendRequest object
+            new_request = FriendRequest(
+                sender_id=sender_id, receiver_id=receiver_id, status='pending')
+            new_request.save()
+            return JsonResponse({'status': True, 'message': 'Friend request sent'})
+
+    return JsonResponse({'status': False, 'message': 'Invalid request'})
+
+
+def user_requests(request):
+    requests = FriendRequest.objects.filter(receiver_id = request.session['user'])
+    return render(request, "user_requests.html",{"requests":requests})
+
+
+def accept_friend_request(request):
+    if request.method == 'POST':
+        request_id = request.POST.get('request_id')
+        friend_request = FriendRequest.objects.get(id=request_id)
+        if friend_request.receiver_id == request.session['user']:
+            friend_request.status = 'friends'
+            friend_request.save()
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Unauthorized'})
         
-
-        return render(request, "user_requests.html")
-
-
-
-
-
+def decline_friend_request(request):
+    if request.method == 'POST':
+        request_id = request.POST.get('request_id')
+        friend_request = FriendRequest.objects.get(id=request_id)
+        if friend_request.receiver == request.session['user']:
+            friend_request.delete()
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Unauthorized'})
 

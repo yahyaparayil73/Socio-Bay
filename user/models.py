@@ -14,6 +14,9 @@ class User(models.Model):
     user_last_seen = models.DateTimeField(default=None, blank=True, null=True)
     user_online_status = models.IntegerField(default=0, blank=True, null=True)
 
+    def has_sent_friend_request(self, user):
+        return self.sent_requests.filter(receiver=user).exists()
+
     class Meta:
         db_table = 'users'
 

@@ -24,16 +24,10 @@ urlpatterns = [
     path('privacy_policy',views.privacy_policy, name='privacy_policy'),
     path('search_users/', views.search_users, name='search_users'),
     path('show_profile/user=<str:username>', views.show_profile, name='show_profile'),
-    # path('send-friend-request/<str:username>', views.send_friend_request, name='send_friend_request'),
     path('send-friend-request/', views.send_friend_request, name='send_friend_request'),
+    path('accept_friend_request/', views.accept_friend_request, name='accept_friend_request'),
+    path('decline_friend_request/', views.decline_friend_request, name='decline_friend_request'),
+
     
     
-
-
-
-
-
-
-
-
 ]

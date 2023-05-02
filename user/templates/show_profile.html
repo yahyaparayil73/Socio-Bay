@@ -22,15 +22,13 @@
                 <img src="{{ data.user_image.url }}" width="85px" alt=""
                     style="display: block;margin-left: auto;margin-right: auto;">
                 <div class="card-body text-center">
-                    <h5 class="card-title">{{data.user_name}}</h5>
+                    <h5 class="card-title">{{data.user_name | title}}</h5>
                     <p class="card-text">{{data.user_email}}<br>
 
                     </p>
-                    <!-- <form id="friend_request_form" method="POST" action="{% url 'user:send_friend_request' %}"> -->
-                        {% csrf_token %}
-                        <input type="hidden" name="user_id" value="{{ data.user_id }}">
-                        <button type="submit" class="btn btn-success" id="request_btn">Send Request</button>
-                    <!-- </form> -->
+                    {% csrf_token %}
+                    <input type="hidden" name="user_id" value="{{ data.user_id }}">
+                    <button type="submit" class="btn btn-success" id="request_btn">Send Request</button>
                     <span id="span1" style="display: none;">
                         {{data.id}}
                     </span>
@@ -41,42 +39,48 @@
     </div>
 </body>
 <script>
-    
-    var id =  $('#span1').html()
     $(document).ready(function () {
-        console.log(id)
+        var id = $('#span1').html();
+        console.log(id);
         $.ajaxSetup({
             headers: {
                 "X-CSRFToken": $('[name=csrfmiddlewaretoken]').val()
             }
         });
-    });
 
-    $(function () {
         $('#request_btn').click(function () {
-            console.log(id)
-            // Get the ID of the user you want to send the friend request to
-            var user_id = $('#user_id').val();
 
-            // Send a POST request to the server with the user ID data
             $.ajax({
                 url: '{% url "user:send_friend_request" %}',
                 method: 'POST',
                 data: { 'user_id': id },
                 success: function (response) {
-                    // Handle success here
-                    if(response.status == true){
-                        alert('Request has been sent')
+                    if (response.status == true) {
+                        alert('Request sent');
+                    } else if (response.message == 'Cannot send friend request to self') {
+                        alert('Cannot send friend request to self')
+                    } else {
+                        alert('Request has already been sent to this profile')
                     }
-
                 },
-                // error: function (xhr, status, error) {
-                //     // Handle errors here
-                //     alert("Error: " + error);
-                // }
+                error: function (xhr, status, error) {
+                    alert("Error: " + error);
+                }
             });
         });
     });
+
+
+
+    const requestBtn = document.getElementById('request_btn');
+
+    requestBtn.addEventListener('click', function () {
+        // Disable the button
+        requestBtn.disabled = true;
+
+        // Code to send the request goes here
+    });
+
 
 </script>
 

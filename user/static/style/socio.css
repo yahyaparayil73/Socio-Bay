@@ -274,10 +274,11 @@ body {
 .results-card {
 
     width: 100%;
-    box-shadow: 0 2px 0 2px rgba(0, 0, 0, 0.25);
-    border-radius: 7px;
-    padding: 15px 25px;
+    /* box-shadow: 0 2px 0 2px rgba(0, 0, 0, 0.25); */
+    /* border-radius: 7px; */
+    /* padding: 15px 25px; */
     margin: 0 auto;
+    border: 3px solid rgb(232, 230, 230);
 
 }
 
@@ -286,4 +287,17 @@ h6 {
     margin-top: 8px;
     margin-left: 10px;
 
+}
+
+#results_box a {
+    display: block;
+    padding: 5px;
+    /* border: 1px solid #ccc; */
+    text-decoration: none;
+    color: #333;
+}
+
+#results_box a:hover {
+    background-color: #262424;
+    color: white;
 }

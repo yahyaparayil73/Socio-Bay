@@ -147,52 +147,8 @@
 
 
         }
-
-        // const url = window.location.href;
-        // const searchForm = document.getElementById('search-form');
-        // const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-        // const searchInput = document.getElementById('search-input');
-        // const sendSearchData = (user) => {
-        //     $.ajax({
-        //         type: 'POST',
-        //         url: '/search_results/',
-        //         data: {
-        //             'csrfmiddlewaretoken': csrf,
-        //             'user': user,
-        //         },
-        //         success: (res) => {
-        //             console.log(res);
-        //         },
-        //         error: (err) => {
-        //             console.log(err);
-        //         }
-        //     });
-        // }
-
-        // searchInput.addEventListener('keyup', e => {
-        //     console.log(e.target.value);
-        //     const resultsBox = document.getElementById('results-box');
-        //     if (resultsBox !== null) {
-        //         // Do something with the element
-        //         resultsBox.classList.remove('not-visible');
-        //     }
-        //     sendSearchData(e.target.value);
-        // });
-
-
-        // if (searchInput && resultsBox) {
-        //     searchInput.addEventListener('keyup', e => {
-        //         console.log(e.target.value);
-        //         if (resultsBox.classList.contains('not-visible')) {
-        //             resultsBox.classList.remove('not-visible');
-        //         }
-
-        //         sendSearchData(e.target.value);
-        //     });
-        // }
-
-
     </script>
+
     <script>
 
         $(document).ready(function () {
@@ -222,7 +178,7 @@
                         user = data[i].username
                         userid = data[i].id
                         urls = url.replace('name', user)
-                        var divs = '<div>' + user + '</div>'
+                        var divs = '<div>' + user.charAt(0).toUpperCase() + user.slice(1) + '</div>';
                         $('#results_box').append('<a href="' + urls + '">' + divs + '</a>')
 
 
@@ -234,6 +190,23 @@
             });
 
         })
+
+        $(document).ready(function () {
+            // Hide the results box on page load
+            $('#results_box').hide();
+
+            // Listen for changes in the search input field
+            $('#search-input').on('input', function () {
+                // If the search input field is empty, hide the results box
+                if ($(this).val().length === 0) {
+                    $('#results_box').hide();
+                } else {
+                    // Otherwise, show the results box
+                    $('#results_box').show();
+                }
+            });
+        });
+
         $(function () {
             $('#request_button').click(function () {
                 // Get the title and description values from the form fields
