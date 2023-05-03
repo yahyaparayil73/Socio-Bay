@@ -237,7 +237,7 @@ def decline_friend_request(request):
     if request.method == 'POST':
         request_id = request.POST.get('request_id')
         friend_request = FriendRequest.objects.get(id=request_id)
-        if friend_request.receiver == request.session['user']:
+        if friend_request.receiver_id == request.session['user']:
             friend_request.delete()
             return JsonResponse({'status': 'success'})
         else:

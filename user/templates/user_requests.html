@@ -34,7 +34,7 @@
                         <button class="btn btn-success button_class" data-request-id="{{ data.id }}">Accept</button>
                     </td>
                     <td>
-                        <button class="btn btn-danger button_class" data-request-id="{{ data.id }}">Decline</button>
+                        <button class="btn btn-danger d_button_class" data-request-id="{{ data.id }}">Decline</button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -52,13 +52,16 @@
             });
 
             $('.button_class').click(function () {
+                var button = $(this);
                 var requestId = $(this).data('request-id');
                 $.ajax({
                     url: '{% url "user:accept_friend_request" %}',
                     method: 'POST',
                     data: { 'request_id': requestId },
                     success: function (response) {
-                        // TODO: Handle success response
+                        if (response.status === 'success') {
+                            button.parents('tr').remove();
+                        }
                     },
                     error: function (xhr, status, error) {
                         console.error(error);
@@ -67,17 +70,18 @@
                 });
             });
 
-            $('.button_class').click(function () {
-                var requestId = $(this).data('request-id');
-                var buttonType = $(this).hasClass('btn-success') ? 'accept' : 'decline';
+            $('.d_button_class').click(function () {
+                var button = $(this);
+                var requestId = button.data('request-id');
+                // var buttonType = $(this).hasClass('btn-success') ? 'accept' : 'decline';
                 $.ajax({
-                    url: '{% url "user:' + buttonType + '_friend_request" %}',
+                    url: '{% url "user:decline_friend_request" %}',
                     method: 'POST',
                     data: { 'request_id': requestId },
                     success: function (response) {
                         if (response.status === 'success') {
                             // Remove the table row
-                            $(this).closest('tr').remove();
+                            button.parents('tr').remove();
                         } else {
                             // TODO: Handle error response
                         }
