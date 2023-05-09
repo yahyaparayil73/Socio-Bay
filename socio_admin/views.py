@@ -1,7 +1,6 @@
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from socio_admin.models import Admin
-
-
 from user.models import Complaint,User
 
 # Create your views here.
@@ -33,3 +32,13 @@ def view_complaints(request):
 def viewUsers(request):
     users = User.objects.all()
     return render(request,'view_users.html',{'users':users})
+
+def delete_users(request):
+    if request.method == 'POST':
+        request_id = request.POST.get('request_id')
+        user_to_delete = User.objects.get(id=request_id)
+        if user_to_delete.id ==  request_id:
+            user_to_delete.delete()
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Unauthorized'})

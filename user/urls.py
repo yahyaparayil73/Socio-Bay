@@ -12,7 +12,6 @@ urlpatterns = [
     path ('test',views.test,name='test'),
     path ('user_change_password',views.user_change_password,name='user_change_password'),
     path ('chat', views.chat, name="chat"),
-    path ('chat_history', views.chat_history, name="chat_history"),
     path ('user_requests', views.user_requests, name="user_requests"),
     path ('add_friend', views.add_friend, name="add_friend"),
     path ('user_logout', views.user_logout, name="user_logout"),
@@ -27,6 +26,8 @@ urlpatterns = [
     path('send-friend-request/', views.send_friend_request, name='send_friend_request'),
     path('accept_friend_request/', views.accept_friend_request, name='accept_friend_request'),
     path('decline_friend_request/', views.decline_friend_request, name='decline_friend_request'),
+    path ('chat_history/<int:chat_id/', views.chat_history, name="chat_history"),
+    path('send_message/', views.send_message, name='send_message'),
 
     
     

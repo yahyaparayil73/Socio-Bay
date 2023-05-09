@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
-from user.models import Complaint, FriendRequest
-from user.models import User
+from user.models import Chat, Complaint, FriendRequest, User, Message
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.db.models import Q
@@ -21,7 +20,20 @@ def user_home(request):
             context={'user_name': user}
         )
         return JsonResponse({'html': html})
-    return render(request, 'user_home.html', {'user_home_name': user})
+
+    # Get all accepted friend requests where the logged-in user is either the sender or receiver
+    friend_req = FriendRequest.objects.filter(
+        (Q(sender_id=request.session['user']) & Q(status='friends')) |
+        (Q(receiver_id=request.session['user']) & Q(status='friends'))
+    ).select_related('sender', 'receiver')
+
+    # Create a list of connected user names
+    connected_users = list(friend_req)
+
+    member = User.objects.get(id=request.session['user'])
+
+    return render(request, 'user_home.html', {'user_home_name': user, 'connected_users': connected_users, 'member': member})
+
 
 
 def user_login(request):
@@ -116,8 +128,29 @@ def chat(request):
 
 
 def chat_history(request):
-    return render(request, "chat_history.html")
+    chat = get_object_or_404(Chat, id = chat_id)
+    messages = chat.messages.order_by('timestamp')
+    return render(request, "chat_history.html",{'chat': chat, 'messages': messages})
 
+
+def send_message(request):
+    if request.method == 'POST':
+        sender_id = request.POST.get('sender_id')
+        receiver_id = request.POST.get('receiver_id')
+        chat_id = request.POST.get('chat_id')
+        message_text = request.POST.get('message_text')
+        message = Message.objects.create(
+            sender_id=sender_id,
+            receiver_id=receiver_id,
+            chat_id=chat_id,
+            message_text=message_text
+        )
+        message.save()
+        response_data = {'success': True}
+        return JsonResponse(response_data)
+    else:
+        response_data = {'success': False}
+        return JsonResponse(response_data)
 
 def user_requests(request):
     requests = FriendRequest.objects.filter(
@@ -218,8 +251,9 @@ def send_friend_request(request):
 
 
 def user_requests(request):
-    requests = FriendRequest.objects.filter(receiver_id = request.session['user'])
-    return render(request, "user_requests.html",{"requests":requests})
+    requests = FriendRequest.objects.filter(
+        receiver_id=request.session['user'])
+    return render(request, "user_requests.html", {"requests": requests})
 
 
 def accept_friend_request(request):
@@ -232,7 +266,8 @@ def accept_friend_request(request):
             return JsonResponse({'status': 'success'})
         else:
             return JsonResponse({'status': 'error', 'message': 'Unauthorized'})
-        
+
+
 def decline_friend_request(request):
     if request.method == 'POST':
         request_id = request.POST.get('request_id')
@@ -242,4 +277,3 @@ def decline_friend_request(request):
             return JsonResponse({'status': 'success'})
         else:
             return JsonResponse({'status': 'error', 'message': 'Unauthorized'})
-
